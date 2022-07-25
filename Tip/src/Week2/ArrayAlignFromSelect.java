@@ -23,4 +23,5 @@ public class ArrayAlignFromSelect { // 선택정렬
     }
     
     //버블 정렬은 그 머냐 for문 돌아서 비교연산자로 쓰르르륵 하는 것.
+    //O(N^2)
 }
