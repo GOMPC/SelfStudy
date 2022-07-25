@@ -40,3 +40,4 @@ bin/
 .project
 test/resources/projects/**/.vscode
 test/resources/projects/maven/salut/testGradle
+.vscode/
