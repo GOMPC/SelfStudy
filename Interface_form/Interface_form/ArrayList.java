@@ -145,7 +145,7 @@ public class ArrayList<E> implements List<E>, Cloneable { // clone()할려고 �
         for(int i=index;i<size-1;i++){ // size - 1 하는 이유는 알지?
             array[i] = array[i+1];
             array[i+1] = null; // 얘는 null 잡아야지 ㅇㅇ 마지막놈
-        }
+        } // 여기서 size = 5일때, index4를 remove한다고 가정해보셈 ㅎ
 
         size--; // 줄었으니까
         resize(); // 메모리는 소중하니까
