@@ -214,6 +214,57 @@ public class SLinkedList<E> implements List<E> {
             x = nextNode;
         } // for마지막에 x = x.next를 넣어도 똑같지 않나? null로 잡아서 next가 안되넹 ^0^
     }     // 이때 객체 자체를 null 해주기 보다는 모든 노드를 하나 하나 null로 다 잡아줘야 GC가 알아먹...ㅠ
+
+    public Object clone() throws CloneNotSupportedException{
+
+        @SuppressWarnings("unchecked")
+        SLinkedList<? super E> clone = (SLinkedList<? super E>) super.clone();
+        
+        clone.head = null;
+        clone.tail = null;
+        clone.size = 0;
+
+        for(Node<E> x = head; x != null; x = x.next){
+            clone.addLast(x.data);
+        }
+        // 얕은 복사 한번 하고 새로 입력하는 느낌? 그냥 새로 똑같이 size랑 받아서 하는게 더 낫지않나?
+        return clone;
+    }
+
+    // toArray()메소드의 구현에서의 빡침
+    // ArrayList는 내부에서 데이터를 Object[] 배열에 박았으니 형을 바로 꺼내 쓸 수 있다.
+    // 하지만 Linked는 Node라는 객체 안에 data라는 가치를 가지고 있으니 
+    // Node 자체가 래퍼클래스나 사용자가 만든 클래스 같은 데이터를 가질 수 없다.
+    // >> Node의 data변수가 객체 타입 변수인 것이지 Node 그 자체는 타입을 가질 수 없는걸
+    // 그래서 Arrays.copyOf() / System.arraycopy 안되용 ㅠ.ㅠ
     
+    // lang.reflect 패키지에 있는 Array 클래스의 도움을 받는다.
+    // https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/reflect/Array.html
+    // newInstance 메소드를 써먹을 예정
+
+    public Object[] toArray(){
+
+        Object[] array = new Object[size];
+        int idx = 0;
+        for(Node<E> x = head; x != null; x=x.next){
+            array[idx++] = (E) x.data;
+        }
+        return array;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] a){ // 제네릭이 E가 아닌 T! 새로운 친구네?
+        if(a.length<size){         // 하위 타입이 상위 타입으로 데이터를 받을 수 있게! 똑똑해!
+            a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
+        }               // 뭐 이렇게 기냐 ㅡㅡ a의 타입을 알기 위해 먼저 getClass().getComponentType()을 통해 
+        int i = 0;      // 객체가 어떤 유형의 배열인지를 파라미터에 넣고, 배열의 크기를 설정한다.
+        Object[] result = a; // a를 얕복한 Object[]배열 하나 드루와~ 얕복해도 되는 이유에 대해 생각해보도록 ㅇㅇ
+        for(Node<E> x = head; x != null; x=x.next){
+            result[i++] = x.data; // i++을 여기 넣는 센스 칭찬해~
+        }
+        return a; // 근데 어떻게 타입이 다른데 복사를 함? ㅇㅅㅇ?
+    }
+    
+
 
 }
