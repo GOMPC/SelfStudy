@@ -265,6 +265,6 @@ public class SLinkedList<E> implements List<E> {
         return a; // 근데 어떻게 타입이 다른데 복사를 함? ㅇㅅㅇ?
     }
     
-
+    // sort부터 다시 하자.
 
 }
