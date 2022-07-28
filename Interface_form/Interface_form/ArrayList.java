@@ -206,5 +206,9 @@ public class ArrayList<E> implements List<E>, Cloneable { // clone()할려고 �
         System.arraycopy(array, 0, a, 0, size);
         return a;
     }
+
+    // clone() 이랑 toArray() sort()는 이 집 안에 놓을까? 아님 밖으로 뺄까?
+    // 집 안에 둬야 쓸 수 있는거 아님? 밖에 빼면 어떻게 쓸껴? ㅇㅈ
+    
     
 }

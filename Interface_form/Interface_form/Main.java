@@ -4,7 +4,8 @@ public class Main {
 
     public static void main(String[] args) {
         
-        SLinkedList<Integer> list = new SLinkedList<>();
+        SLinkedList<Integer> sList = new SLinkedList<>();
+        DLinkedList<Character> dList = new DLinkedList<>();
 
     }
     

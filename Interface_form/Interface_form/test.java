@@ -6,7 +6,7 @@ public class test {
 
     public static void main(String[] args) {
     
-        SLinkedList<Student> list = new SLinkedList<>();
+        DLinkedList<Student> list = new DLinkedList<>();
 
         list.add(new Student("김자바", 100));
         list.add(new Student("이씨플", 88));
