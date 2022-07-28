@@ -1,5 +1,7 @@
 package Interface_form;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 import Interface_form.List;
@@ -224,7 +226,7 @@ public class SLinkedList<E> implements List<E> {
         clone.tail = null;
         clone.size = 0;
 
-        for(Node<E> x = head; x != null; x = x.next){
+        for(Node<E> x = head; x != null; x = x.next){ // 인자로 받은게 없는데 Node<E> x는 어디서 튀어나옴? 앞에 준비해뒀습니다 ^0^
             clone.addLast(x.data);
         }
         // 얕은 복사 한번 하고 새로 입력하는 느낌? 그냥 새로 똑같이 size랑 받아서 하는게 더 낫지않나?
@@ -266,5 +268,25 @@ public class SLinkedList<E> implements List<E> {
     }
     
     // sort부터 다시 하자.
+
+    // collection.sort(); 도 뜯어보면 내부에서는 Arrays.sort();를 쓴다? 그 리스트를 Object[]로 변환해서 sort하고 다시 노드로 세팅이라니....
+    // 래퍼 클래스면 그냥 해도 될텐데, 객체일 경우 객체에 Comparable을 구현해놧거나 Comparator를 구현해서 넘겨줄 경우 두가지로 나뉜다.
+
+    public void sort(){
+        // 안 넘겨주거나 구현 안해놨으면 cannot be cast to class java.lang.Comparable 에러 하이~
+        // 구현되어 있을 경우 null로 넘기면 Arrays.sort()가 객체의 compareTo메소드에 정의된대로 ㅇㅇ
+        sort(null); // 엄서용~
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void sort(Comparator<? super E> c){
+        Object[] a = this.toArray();
+        Arrays.sort(a, (Comparator) c);
+
+        int i = 0;
+        for(Node<E> x = head; x != null; x = x.next, i++){
+            x.data = (E) a[i];
+        }
+    }
 
 }
