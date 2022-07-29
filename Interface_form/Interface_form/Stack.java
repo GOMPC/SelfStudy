@@ -1,6 +1,7 @@
 package Interface_form;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.EmptyStackException;
 
 import Interface_form.StackInterface;
@@ -117,4 +118,44 @@ public class Stack<E> implements StackInterface<E> {
     public boolean empty() {
         return size == 0;
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        
+        // 새로운 스택 객체 생성
+        Stack<?> cloneStack = (Stack<?>) super.clone();
+
+        // 새로운 스택의 배열도 만드러잇~ 얕복 멈춰!
+        cloneStack.array = new Object[size];
+
+        // 복사 드가자~
+        System.arraycopy(array, 0, cloneStack.array, 0, size);
+        return cloneStack;
+    }
+
+    public Object[] toArray(){
+        return Arrays.copyOf(array, size);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] a){
+        if(a.length<size){
+            return (T[]) Arrays.copyOf(array, size, a.getClass());
+        }
+        
+        System.arraycopy(array, 0, a, 0, size);
+
+        return a;
+    }
+
+    public void sort(){
+        sort(null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void sort(Comparator<? super E> c){
+        Arrays.sort((E[]) array, 0, size, c);
+    }
+
+    
 }
