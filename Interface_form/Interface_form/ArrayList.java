@@ -1,7 +1,6 @@
 package Interface_form;
 
 import java.util.Arrays;
-import Interface_form.List;
 
 public class ArrayList<E> implements List<E>, Cloneable { // clone()할려고 ㅎ Object에 protected라 ㅎ
 

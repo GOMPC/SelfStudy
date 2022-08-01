@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-import Interface_form.List;
-
 public class DLinkedList<E> implements List<E> {
 
     private Node<E> head; // 대가리

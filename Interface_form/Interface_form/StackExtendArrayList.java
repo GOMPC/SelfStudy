@@ -4,7 +4,7 @@ import java.util.EmptyStackException;
 import Interface_form.StackInterface;
 import Interface_form.ArrayList;
 
-public class StackExtendArrayList<E> extends ArrayList<E> implements StackInterface {
+public class StackExtendArrayList<E> extends ArrayList<E> implements StackInterface<E> {
 
     public StackExtendArrayList(){
         super();
@@ -15,7 +15,7 @@ public class StackExtendArrayList<E> extends ArrayList<E> implements StackInterf
     }
 
     @Override
-    public E push(E item) { // 이친구 왜 맛탱이갔냐
+    public E push(E item) { // 이친구 왜 맛탱이갔냐 >> implements StackInterface에 <E>안붙여서 맛탱이감 ㅋㅋ
         addLast(item); // ArrayList의 친구
         return item;
     }
