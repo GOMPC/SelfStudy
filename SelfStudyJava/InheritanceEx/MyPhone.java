@@ -1,7 +1,5 @@
 package InheritanceEx;
 
-import javax.sound.sampled.SourceDataLine;
-
 public class MyPhone extends Phone {
     int age;
 

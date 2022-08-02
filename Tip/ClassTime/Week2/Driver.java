@@ -19,6 +19,8 @@ public class Driver {
         SportCar wanted = new SportCar();
 
         gompc.drive(wanted);
+        gompc.drive(bus441);
+        gompc.drive(kakao);
     }
 
     // 애응~
