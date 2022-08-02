@@ -21,14 +21,14 @@ public class ArrayQueue<E> implements Queue<E>, Cloneable {
         this.rear = 0;
     }
 
-    public ArrayQueue(int capacity){
+    public ArrayQueue(int capacity){ // 이것도 디폴트보다 낮으면 디폴트만큼 해야하지 않을까?
         this.array = new Object[capacity];
         this.size = 0;
         this.front = 0;
         this.rear = 0;
     }
 
-    private void resize(int newCapacity){
+    private void resize(int newCapacity){ // 여기선 왜 resize의 매개변수가 있을까.
 
         int arrayCapacity = array.length; // 지금 사는 집 크기
 
@@ -53,7 +53,6 @@ public class ArrayQueue<E> implements Queue<E>, Cloneable {
             resize(array.length*2);
         }
         rear = (rear+1) % array.length;
-
         array[rear] = item;
         size++;
 
@@ -158,7 +157,7 @@ public class ArrayQueue<E> implements Queue<E>, Cloneable {
             res = (T[]) Arrays.copyOfRange(array, 0, size, a.getClass());
             int rearLength = array.length -1 -front; // 뒷 부분의 요소 개수
 
-            if(rearLength>0){ // 뒷부분 복사
+            if(rearLength>0){ // 뒷부분 복사 ( 나갈 순서대로 복사 ) 왜 0보다 커야할까 고민해봐.
                 System.arraycopy(array, front+1, res, 0, rearLength);
             } // 앞부분 복사
             System.arraycopy(array, 0, res, rearLength, rear+1); // 앞부분 복사

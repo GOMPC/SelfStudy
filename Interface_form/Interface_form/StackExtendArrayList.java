@@ -1,8 +1,6 @@
 package Interface_form;
 
 import java.util.EmptyStackException;
-import Interface_form.StackInterface;
-import Interface_form.ArrayList;
 
 public class StackExtendArrayList<E> extends ArrayList<E> implements StackInterface<E> {
 

@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EmptyStackException;
 
-import Interface_form.StackInterface;
-
 public class Stack<E> implements StackInterface<E> {
 
     private static final int DEFAULT_CAPACITY = 10; // 디폴트!

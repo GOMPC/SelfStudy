@@ -60,7 +60,7 @@ public class DLinkedList<E> implements List<E> {
         return true;
     }
 
-    public void addLast(E value){
+    public void addLast(E value){ // add와 하는 일이 같은데 굳이 왜 있을까?
         Node<E> newNode = new Node<E>(value); // 선수 입장~
 
         if(size==0){ // 마수걸이 입장~
@@ -305,7 +305,7 @@ public class DLinkedList<E> implements List<E> {
         Object[] array = new Object[size];
         int idx = 0;
         for(Node<E> x = head; x != null; x = x.next){
-            array[idx++] = (E) x.data; // E라고 강제타입변환 굳이? 어차피 E타입 아니냐
+            array[idx++] = (E) x.data; // E라고 강제타입변환 굳이? 어차피 E타입 아니냐? ? super E인 친구들을 그냥 E로 통일시키는 역할?
         }
         return array;
     }

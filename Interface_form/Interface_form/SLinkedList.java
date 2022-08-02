@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-import Interface_form.List;
-
 public class SLinkedList<E> implements List<E> {
     
     private Node<E> head; // 대가리
@@ -92,7 +90,7 @@ public class SLinkedList<E> implements List<E> {
 
     }
     
-    public E remove() {
+    public E remove() { // equals removeFirst
 
         Node<E> headNode = head;
 
@@ -143,7 +141,7 @@ public class SLinkedList<E> implements List<E> {
 
     }
 
-    //remove(Object)의 상황. 불가능할땐(요소에 Object가 없으면) 걍 exception 띄우면 안되낭?
+    //remove(Object)의 상황. 불가능할땐(요소에 Object가 없으면) 걍 exception 띄우면 안되낭? 왜 boolean타입으로 반환할까
     public boolean remove(Object value){
 
         Node<E> prevNode = head;
@@ -156,7 +154,7 @@ public class SLinkedList<E> implements List<E> {
                 break;
             }
             prevNode = x;
-        }
+        } // 찾으면 순서가 prevNode > x > 이렇게 되겄지.
 
         // 일치하지 않을 때 라고 설명이 되어 있는데
         if(x==null) return false; // ㅇㅅㅇ? x가 첨에 head라고 잡앗는데 null일 수 있나?
