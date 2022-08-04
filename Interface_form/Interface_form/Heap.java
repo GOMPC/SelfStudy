@@ -1,5 +1,6 @@
 package Interface_form;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -145,10 +146,78 @@ public class Heap<E> {
 
             Object childVal = array[child]; // 첫째띠~
 
-            if(right <= size && comp.compare((E) childVal, (E) array[right]) > 0){
+            if(right <= size && comp.compare((E) childVal, (E) array[right]) > 0){ // 어떤 방식으로 내려가는지를 이해할 것. 왼쪽이 더 크다고 왼쪽이랑 오른쪽을 바꾸는게 아니다.
                 child = right;
-                childVal = array[child];
+                childVal = array[child]; // 뇌가 뻑뻑하다... 왼쪽 값이 크면 큰거로 바꿔치기하면 안되니까 작은쪽 값으로 바꾼다는거임 ㅇㅋ?
             }
+
+            if(comp.compare(target, (E) childVal) <= 0){ // 여기선 다 작으니까 컷~ 하는거고 ㅇㅇ
+                break;
+            }
+
+            array[parent] = childVal; // 그래서 왼쪽이 작으면 그냥 이러면 되고 오른쪽이 작아도 바꾼걸로 내려감 ㅇㅋ?
+            parent = child;
         }
+
+        array[parent] = target;
+
+        if(array.length > DEFAULT_CAPACITY && size < array.length / 4){
+            resize(Math.max(DEFAULT_CAPACITY, array.length / 2));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void siftDownComparable(int idx, E target){
+
+        Comparable<? super E> comp = (Comparable<? super E>) target;
+
+        array[idx] = null;
+        size--;
+
+        int parent = idx;
+        int child;
+
+        while((child = getLeftChild(parent)) <= size){
+
+            int right = getRightChild(parent);
+
+            Object childVal = array[child]; // 일단 왼쪽 값으로 담아주고
+
+            if(right <= size && ((Comparable<? super E>) childVal).compareTo((E)array[right]) > 0){ // 왼쪽이 더 크면
+                child = right;
+                childVal = array[child]; // 오른쪽걸로 바꿔치기하고 = 그럼 둘중 작은 값이 childVal잖아
+            }
+
+            if(comp.compareTo((E) childVal) <= 0){ // 컷되면 끝내는거고
+                break;
+            }
+            array[parent] = childVal; // 안되면 작은값으로 바꿔치기 해버렷~
+            parent = child; // 더 내려가~ while while 맨~
+        }
+        array[parent] = comp;
+
+        if(array.length > DEFAULT_CAPACITY && size < array.length / 4){
+            resize(Math.max(DEFAULT_CAPACITY, array.length / 2));
+        }
+    }
+
+    public int size(){
+        return this.size;
+    }
+
+    @SuppressWarnings("unchecked")
+    public E peek(){
+        if(array[1] == null){
+            throw new NoSuchElementException();
+        }
+        return (E) array[1];
+    }
+
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+    public Object[] toArray(){
+        return Arrays.copyOf(array, size + 1);
     }
 }
