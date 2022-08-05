@@ -4,51 +4,50 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-public class Heap<E> {
+public class PriorityQueue<E> implements Queue<E>, Cloneable {
     
-    private final Comparator<? super E> comparator; // 기본타입 말고 다른애들도 받아부려~
+    private final Comparator<? super E> comparator;
     private static final int DEFAULT_CAPACITY = 10;
 
     private int size;
-
     private Object[] array;
 
-    public Heap(){
+    public PriorityQueue(){
         this(null);
     }
 
-    public Heap(Comparator<? super E> comparator){
+    public PriorityQueue(Comparator<? super E> comparator){
         this.array = new Object[DEFAULT_CAPACITY];
         this.size = 0;
         this.comparator = comparator;
     }
 
-    public Heap(int capacity){
+    public PriorityQueue(int capacity){
         this(capacity, null);
     }
 
-    public Heap(int capacity, Comparator<? super E> comparator){
+    public PriorityQueue(int capacity, Comparator<? super E> comparator){
         this.array = new Object[capacity];
         this.size = 0;
         this.comparator = comparator;
     }
 
-    private int getParent(int index){ // 엄마~
-        return index/2;
+    private int getParent(int index){
+        return index / 2;
     }
 
-    private int getLeftChild(int index){ // 첫째야~
-        return index*2;
+    private int getLeftChild(int index){
+        return index * 2;
     }
 
-    private int getRightChild(int index){ // 둘째야~
-        return index*2 + 1;
+    private int getRightChild(int index){
+        return index * 2 + 1;
     }
 
     private void resize(int newCapacity){
         Object[] newArray = new Object[newCapacity];
 
-        for(int i=1;i<=size;i++){ // 왜 1부터일까요?
+        for(int i=1;i<=size;i++){
             newArray[i] = array[i];
         }
 
@@ -56,47 +55,53 @@ public class Heap<E> {
         this.array = newArray;
     }
 
-    public void add(E value){
-        if(size+1 == array.length){
+    @Override
+    public boolean offer(E value) {
+        
+        if(size + 1 == array.length){ // 왜 size +1 해줄까요
             resize(array.length*2);
         }
 
-        siftUp(size+1, value); // 일단 들어가세요~
+        siftUp(size+1, value);
         size++;
+        return true;
     }
 
     private void siftUp(int idx, E target){
+
         if(comparator != null){
             siftUpComparator(idx, target, comparator);
         } else {
             siftUpComparable(idx, target);
         }
+
     }
 
-    @SuppressWarnings("unchecked") // Comparator가 있어요~
+    @SuppressWarnings("unchecked")
     private void siftUpComparator(int idx, E target, Comparator<? super E> comp){
-        
-        while(idx>1){ // 조상님한테까지는 안감(Why?) >> 1이상이여야 parent 구할때 조상님 한테 가는거임 ㅇㅇ
-            int parant = getParent(idx); // 엄마~
-            Object parentVal = array[parant]; // ㅇㅇ?
 
-            if(comp.compare(target, (E) parentVal) >= 0){ // 컷~
+        while(idx > 1){
+            int parent = getParent(idx);
+            Object parentVal = array[parent];
+
+            if(comp.compare(target, (E) parentVal) >= 0){
                 break;
             }
 
             array[idx] = parentVal;
-            idx = parant;
+            idx = parent;
         }
 
         array[idx] = target;
+
     }
 
     @SuppressWarnings("unchecked")
     private void siftUpComparable(int idx, E target){
-        // 여기서 왜 comp를 따로 빼 둘까요? 헤헤
+
         Comparable<? super E> comp = (Comparable<? super E>) target;
 
-        while(idx>1){
+        while(idx > 1){
             int parent = getParent(idx);
             Object parentVal = array[parent];
 
@@ -106,20 +111,34 @@ public class Heap<E> {
             array[idx] = parentVal;
             idx = parent;
         }
+
         array[idx] = comp;
-    } // 최대 힙을 구하고 싶다면 compare(To) 비교연산자를 <=로 바꿔주면 끗
+
+    }
+
+    @Override
+    public E poll() {
+        
+        if(array[1] == null){
+            return null;
+        }
+
+        return remove();
+
+    }
 
     @SuppressWarnings("unchecked")
     public E remove(){
-        if(array[1]==null){ // 이게 무슨 일이야~
+        if(array[1] == null){
             throw new NoSuchElementException();
         }
 
-        E result = (E) array[1]; // 대가리를 컷하는데
-        E target = (E) array[size]; // 꼬다리를 대가리에 꽂아서 내릴거임
-        array[size] = null; // ㅇㅋ?
+        E result = (E) array[1];
+        E target = (E) array[size];
 
-        siftDown(1, target); // 대가리 자리로 꽂아버려~
+        array[size] = null;
+        size--;
+        siftDown(1, target);
 
         return result;
     }
@@ -128,35 +147,35 @@ public class Heap<E> {
         if(comparator != null){
             siftDownComparator(idx, target, comparator);
         } else {
-            siftDownComparable(idx, target);
+            siftDownComparable(idx, target); // 이놈 어디갔냐? 직접 짜보라는건가
         }
     }
 
     @SuppressWarnings("unchecked")
     private void siftDownComparator(int idx, E target, Comparator<? super E> comp){
-        
+
         array[idx] = null;
-        size--;
-
+        
         int parent = idx;
-        int child; // 첫째야~
+        int child;
 
-        while((child = getLeftChild(parent)) <= size){ // 선넘지마
-            int right = getRightChild(parent); // 둘째야~
+        while((child = getLeftChild(parent)) <= size){
 
-            Object childVal = array[child]; // 첫째띠~
+            int right = getRightChild(parent);
+            Object childVal = array[child];
 
-            if(right <= size && comp.compare((E) childVal, (E) array[right]) > 0){ // 어떤 방식으로 내려가는지를 이해할 것. 왼쪽이 더 크다고 왼쪽이랑 오른쪽을 바꾸는게 아니다.
+            if(right <= size && comp.compare((E) childVal, (E) array[right]) > 0){
                 child = right;
-                childVal = array[child]; // 뇌가 뻑뻑하다... 왼쪽 값이 크면 큰거로 바꿔치기하면 안되니까 작은쪽 값으로 바꾼다는거임 ㅇㅋ?
+                childVal = array[child];
             }
 
-            if(comp.compare(target, (E) childVal) <= 0){ // 여기선 다 작으니까 컷~ 하는거고 ㅇㅇ
+            if(comp.compare(target, (E) childVal) <= 0){
                 break;
             }
 
-            array[parent] = childVal; // 그래서 왼쪽이 작으면 그냥 이러면 되고 오른쪽이 작아도 바꾼걸로 내려감 ㅇㅋ?
+            array[parent] = childVal;
             parent = child;
+
         }
 
         array[parent] = target;
@@ -164,6 +183,7 @@ public class Heap<E> {
         if(array.length > DEFAULT_CAPACITY && size < array.length / 4){
             resize(Math.max(DEFAULT_CAPACITY, array.length / 2));
         }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -172,7 +192,6 @@ public class Heap<E> {
         Comparable<? super E> comp = (Comparable<? super E>) target;
 
         array[idx] = null;
-        size--;
 
         int parent = idx;
         int child;
@@ -180,20 +199,20 @@ public class Heap<E> {
         while((child = getLeftChild(parent)) <= size){
 
             int right = getRightChild(parent);
+            Object childVal = array[child];
 
-            Object childVal = array[child]; // 일단 왼쪽 값으로 담아주고
-
-            if(right <= size && ((Comparable<? super E>) childVal).compareTo((E)array[right]) > 0){ // 왼쪽이 더 크면
+            if(right <= size && ((Comparable<? super E>) childVal).compareTo((E)array[right]) > 0){
                 child = right;
-                childVal = array[child]; // 오른쪽걸로 바꿔치기하고 = 그럼 둘중 작은 값이 childVal잖아
+                childVal = array[right]; // 이게 훨씬 더 이해 잘될듯?
             }
 
-            if(comp.compareTo((E) childVal) <= 0){ // 컷되면 끝내는거고
+            if(comp.compareTo((E) childVal) <= 0){
                 break;
             }
-            array[parent] = childVal; // 안되면 작은값으로 바꿔치기 해버렷~
-            parent = child; // 더 내려가~ while while 맨~
+            array[parent] = childVal;
+            parent = child;
         }
+
         array[parent] = comp;
 
         if(array.length > DEFAULT_CAPACITY && size < array.length / 4){
@@ -205,19 +224,60 @@ public class Heap<E> {
         return this.size;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public E peek(){
+    public E peek() {
         if(array[1] == null){
             throw new NoSuchElementException();
         }
-        return (E) array[1];
+        return (E)array[1];
     }
 
     public boolean isEmpty(){
         return size == 0;
     }
 
-    public Object[] toArray(){
-        return Arrays.copyOf(array, size + 1);
+    public boolean contains(Object value){
+        for(int i = 1; i<=size;i++){
+            if(array[i].equals(value)){
+                return true;
+            }
+        }
+        return false;
     }
+
+    public void clear(){
+        for(int i=0;i<array.length;i++){
+            array[i] = null;
+        }
+
+        size = 0;
+    }
+
+    public Object[] toArray(){
+        return toArray(new Object[size]);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] a){
+        if(a.length <= size){
+            return (T[]) Arrays.copyOfRange(array, 1, size+1, a.getClass());
+        }
+        System.arraycopy(array, 1, a, 0, size);
+        return a;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        try{
+            PriorityQueue<?> cloneHeap = (PriorityQueue<?>) super.clone();
+
+            cloneHeap.array = new Object[size + 1];
+            System.arraycopy(array, 0, cloneHeap.array, 0, size+1);
+            return cloneHeap;
+        } catch(CloneNotSupportedException e) {
+            throw new Error(e);
+        }
+    }
+
 }
