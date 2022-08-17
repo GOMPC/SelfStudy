@@ -2,7 +2,7 @@ package Interface_form;
 
 import java.util.Arrays;
 
-public class ArrayList<E> implements List<E>, Cloneable { // clone()할려고 ㅎ Object에 protected라 ㅎ
+public class ArrayList<E> implements List<E>, Cloneable { // clone()할려고 ㅎ Object에 있는 메소드인데 protected라 ㅎ
 
     private static final int DEFAULT_CAPACITY = 10; //기본(최소) 크기
     private static final Object[] EMPTY_ARRAY = {}; //빈 배열

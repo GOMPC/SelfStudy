@@ -40,7 +40,7 @@ public class SLinkedList<E> implements List<E> {
         head = newNode; // 대가리 지정
         size++; // 컷~
 
-        if(head.next == null) tail = head; // 난 혼자야..
+        if(head.next == null) tail = head; // 혼자야..
     }
 
     public boolean add(E value){ // 그냥 add 한놈으로 다 하면 안되나?
@@ -122,7 +122,7 @@ public class SLinkedList<E> implements List<E> {
         }
 
         Node<E> prevNode = search(index-1); // 전여친
-        Node<E> removedNode = prevNode.next; // 전여친 찾으면 바로 나오죠? search 굳이 여러번 안하죠?
+        Node<E> removedNode = prevNode.next; // 전여친 찾으면 바로 나오죠? search 굳이 한번 더 안하죠?
         Node<E> nextNode = removedNode.next; // 헤으응
 
         E element = removedNode.data; // 보여줄게 마지막 데이터
